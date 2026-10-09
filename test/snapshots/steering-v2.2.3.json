@@ -1,0 +1,49 @@
+{
+  "always": ["ecc-agents", "ecc-coding-style", "ecc-development-workflow", "ecc-git-workflow", "ecc-kiro-harness", "ecc-lessons-learned", "ecc-patterns", "ecc-performance", "ecc-security", "ecc-testing"],
+  "manual": ["ecc-dev-mode", "ecc-research-mode", "ecc-review-mode"],
+  "packFiles": {"angular": 5, "arkts": 5, "csharp": 5, "dart": 5, "fsharp": 5, "nuxt": 5, "perl": 5, "react": 5, "react-native": 8, "vue": 5, "web": 7},
+  "fileMatch": {
+    "ecc-angular-rules": ["**/*.component.ts", "**/*.component.html", "**/*.service.ts", "**/*.directive.ts", "**/*.pipe.ts", "**/*.guard.ts", "**/*.resolver.ts", "**/*.module.ts", "**/*.spec.ts", "**/*.store.ts", "**/*.routes.ts", "**/*.interceptor.ts", "**/*.test.ts"],
+    "ecc-arkts-rules": ["**/*.ets", "**/*.ts", "**/module.json5", "**/oh-package.json5", "**/build-profile.json5", "**/ohosTest/**"],
+    "ecc-cpp-patterns": ["**/*.cpp", "**/*.hpp", "**/*.h", "**/*.cc", "**/*.cxx"],
+    "ecc-csharp-rules": ["**/*.cs", "**/*.csx", "**/*.csproj", "**/*.sln", "**/Directory.Build.props", "**/Directory.Build.targets", "**/appsettings*.json"],
+    "ecc-dart-rules": ["**/*.dart", "**/pubspec.yaml", "**/analysis_options.yaml", "**/AndroidManifest.xml", "**/Info.plist"],
+    "ecc-fsharp-rules": ["**/*.fs", "**/*.fsx", "**/*.fsproj", "**/*.sln", "**/*.slnx", "**/Directory.Build.props", "**/Directory.Build.targets", "**/appsettings*.json"],
+    "ecc-golang-patterns": ["**/*.go"],
+    "ecc-java-patterns": ["**/*.java"],
+    "ecc-kotlin-patterns": ["**/*.kt"],
+    "ecc-nuxt-rules": ["**/nuxt.config.*", "**/app.config.*", "**/app.vue", "**/pages/**", "**/layouts/**", "**/middleware/**", "**/server/**/*.ts", "**/*.vue"],
+    "ecc-perl-rules": ["**/*.pl", "**/*.pm", "**/*.t", "**/*.psgi", "**/*.cgi"],
+    "ecc-php-patterns": ["**/*.php"],
+    "ecc-python-patterns": ["**/*.py"],
+    "ecc-react-native-rules": ["**/*.ts", "**/*.tsx"],
+    "ecc-react-rules": ["**/*.tsx", "**/*.jsx", "**/components/**/*.ts", "**/components/**/*.js", "**/hooks/**/*.ts", "**/hooks/**/*.js", "**/use-*.ts", "**/use-*.tsx", "**/app/**/*.tsx", "**/pages/**/*.tsx", "**/app/**/*.ts", "**/pages/**/*.ts", "**/*.test.tsx", "**/*.test.jsx", "**/*.spec.tsx", "**/*.spec.jsx", "**/__tests__/**/*.ts", "**/__tests__/**/*.tsx"],
+    "ecc-ruby-patterns": ["**/*.rb"],
+    "ecc-rust-patterns": ["**/*.rs"],
+    "ecc-swift-patterns": ["**/*.swift"],
+    "ecc-typescript-patterns": ["**/*.ts", "**/*.tsx"],
+    "ecc-typescript-security": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"],
+    "ecc-vue-rules": ["**/*.vue", "**/*.ts", "**/*.tsx"],
+    "ecc-web-rules": ["**/*.css", "**/*.scss", "**/*.sass", "**/*.less", "**/*.html", "**/*.tsx", "**/*.jsx", "**/*.vue", "**/*.svelte"]
+  },
+  "shipped": {
+    "ecc-arkts-rules": ["**/*.ets", "**/module.json5", "**/oh-package.json5", "**/build-profile.json5", "**/ohosTest/**"],
+    "ecc-react-native-rules": ["**/*.native.ts", "**/*.native.tsx", "**/*.ios.ts", "**/*.ios.tsx", "**/*.android.ts", "**/*.android.tsx", "**/metro.config.*", "**/eas.json"],
+    "ecc-vue-rules": ["**/*.vue"]
+  },
+  "loads": {
+    "src/index.ts": {"files": ["ecc-typescript-patterns", "ecc-typescript-security"], "bytes": 3293},
+    "src/App.tsx": {"files": ["ecc-react-rules", "ecc-typescript-patterns", "ecc-typescript-security", "ecc-web-rules"], "bytes": 50203},
+    "src/app/foo.spec.ts": {"files": ["ecc-angular-rules", "ecc-react-rules", "ecc-typescript-patterns", "ecc-typescript-security"], "bytes": 54695},
+    "src/app/user.component.ts": {"files": ["ecc-angular-rules", "ecc-react-rules", "ecc-typescript-patterns", "ecc-typescript-security"], "bytes": 54695},
+    "nuxt.config.ts": {"files": ["ecc-nuxt-rules", "ecc-typescript-patterns", "ecc-typescript-security"], "bytes": 14320},
+    "src/Button.vue": {"files": ["ecc-nuxt-rules", "ecc-vue-rules", "ecc-web-rules"], "bytes": 37226},
+    "entry/src/main/ets/entryability/EntryAbility.ets": {"files": ["ecc-arkts-rules"], "bytes": 22668},
+    "entry/src/main/module.json5": {"files": ["ecc-arkts-rules"], "bytes": 22668},
+    "src/Settings.ios.tsx": {"files": ["ecc-react-native-rules", "ecc-react-rules", "ecc-typescript-patterns", "ecc-typescript-security", "ecc-web-rules"], "bytes": 68574},
+    "metro.config.js": {"files": ["ecc-react-native-rules", "ecc-typescript-security"], "bytes": 20581},
+    "eas.json": {"files": ["ecc-react-native-rules"], "bytes": 18371},
+    "main.py": {"files": ["ecc-python-patterns"], "bytes": 874},
+    "README.txt": {"files": [], "bytes": 0}
+  }
+}

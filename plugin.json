@@ -1,0 +1,20 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "ecc-for-kiro",
+  "version": "0.1.0",
+  "description": "Unofficial. Sets up ECC (github.com/affaan-m/ECC) for the Kiro IDE and CLI: a wizard skill that downloads a pinned ECC release and converts its agents, skills, steering, commands and disabled hooks into Kiro's formats under ./.kiro.",
+  "author": {
+    "name": "नवुले पवन कुमार राव"
+  },
+  "keywords": [
+    "kiro",
+    "ecc",
+    "agents",
+    "skills",
+    "steering",
+    "setup"
+  ],
+  "license": "MIT",
+  "repository": "https://github.com/windson/ecc-for-kiro",
+  "homepage": "https://github.com/windson/ecc-for-kiro#readme"
+}

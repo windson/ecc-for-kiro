@@ -1,0 +1,35 @@
+{
+  "name": "ecc-for-kiro",
+  "version": "0.1.0",
+  "description": "Unofficial setup wizard that installs ECC (github.com/affaan-m/ECC) into a Kiro project.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "ecc-kiro": "skills/ecc-kiro-setup/scripts/ecc-kiro.mjs"
+  },
+  "files": [
+    "skills/ecc-kiro-setup/SKILL.md",
+    "skills/ecc-kiro-setup/LICENSE",
+    "skills/ecc-kiro-setup/scripts/",
+    "skills/ecc-kiro-setup/assets/",
+    "skills/ecc-kiro-setup/references/",
+    "plugin.json",
+    "LICENSE",
+    "README.md",
+    "THIRD_PARTY_NOTICES.md"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/windson/ecc-for-kiro.git"
+  },
+  "homepage": "https://github.com/windson/ecc-for-kiro#readme",
+  "bugs": {
+    "url": "https://github.com/windson/ecc-for-kiro/issues"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

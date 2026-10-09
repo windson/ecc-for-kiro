@@ -1,0 +1,357 @@
+{
+  "schema": "ecc-kiro.command-rewrites.v1",
+  "description": "Rules R1 to R16 of the command adaptation map, as data. They are applied in order to the whole text of an ECC command when it is installed, and to its description. A rule has an id, the number of the map rule it belongs to (`rule`), a regular expression (`pattern`, with optional `flags` from i, m, s and u), a `replacement` (JavaScript replacement syntax: $1, $&), and a `why`. `commands` limits a rule to the named commands, and then `expect` is the number of times it must match in each of them, so a changed ECC file stops the plan instead of being half fixed. `append` names a snippet of snippets.json (S2 or S3) that is added once at the end of a command the rule has changed. {{commands}} in a pattern stands for the names of the ECC commands, {{uninstalledSkills}} for the skills of `uninstalledSkills` that the install does not have. Credit and license text is never rewritten, whatever the rules say. R3 (frontmatter) and S1 (the header) are done by the installer. R11, R12, R15 and R16 have no rewrite: a command that needs them is class B or C, and the lint keeps it out. Delete a rule to turn it off.",
+  "uninstalledSkills": [
+    "accessibility",
+    "continuous-agent-loop",
+    "cost-tracking",
+    "cpp-coding-standards",
+    "cpp-testing",
+    "fastapi-patterns",
+    "flutter-dart-code-review",
+    "golang-patterns",
+    "golang-testing",
+    "jira-integration",
+    "kotlin-patterns",
+    "kotlin-testing",
+    "marketing-campaign",
+    "python-patterns",
+    "python-testing",
+    "react-patterns",
+    "react-testing",
+    "rust-patterns",
+    "rust-testing",
+    "security-scan",
+    "vue-patterns"
+  ],
+  "rules": [
+    {
+      "id": "instinct-status-resolver",
+      "rule": "R6",
+      "commands": ["instinct-status"],
+      "expect": 1,
+      "pattern": "Run the instinct CLI, resolving the active ECC plugin root[\\s\\S]*?\\(#2037\\)\\.",
+      "replacement": "Run the instinct CLI from the skills folder of this project. If the skill is installed for your user instead, use ~/.kiro/skills/ in place of .kiro/skills/.",
+      "why": "ECC finds its plugin root with a node -e script that reads Claude Code's plugin folders. The skill is installed in .kiro/skills."
+    },
+    {
+      "id": "ecc-root-resolver-line",
+      "rule": "R6",
+      "flags": "m",
+      "pattern": "^ECC_ROOT=\"\\$\\{CLAUDE_PLUGIN_ROOT:-\\$\\(node -e .*\\n",
+      "replacement": "",
+      "why": "The plugin root resolver is deleted: the instinct script has a fixed place."
+    },
+    {
+      "id": "ecc-root-script-path",
+      "rule": "R6",
+      "pattern": "\"\\$ECC_ROOT/skills/continuous-learning-v2/scripts/instinct-cli\\.py\"",
+      "replacement": ".kiro/skills/continuous-learning-v2/scripts/instinct-cli.py",
+      "why": "The instinct CLI is installed with the continuous-learning-v2 skill."
+    },
+    {
+      "id": "plugin-root-script-path",
+      "rule": "R6",
+      "pattern": "\"\\$\\{CLAUDE_PLUGIN_ROOT\\}/skills/continuous-learning-v2/scripts/instinct-cli\\.py\"",
+      "replacement": ".kiro/skills/continuous-learning-v2/scripts/instinct-cli.py",
+      "why": "The instinct CLI is installed with the continuous-learning-v2 skill."
+    },
+    {
+      "id": "plugin-root-intro",
+      "rule": "R6",
+      "pattern": "Run the instinct CLI using the plugin root path:",
+      "replacement": "Run the instinct CLI from the skills folder of this project:",
+      "why": "There is no plugin root in Kiro."
+    },
+    {
+      "id": "plugin-root-fallback",
+      "rule": "R6",
+      "pattern": "Or if `CLAUDE_PLUGIN_ROOT` is not set \\(manual installation\\):",
+      "replacement": "Or, if the skill is installed for your user instead of this project:",
+      "why": "The second form of the command is the user-level install."
+    },
+    {
+      "id": "instinct-skill-home",
+      "rule": "R6",
+      "pattern": "~/\\.claude/skills/continuous-learning-v2/",
+      "replacement": "~/.kiro/skills/continuous-learning-v2/",
+      "why": "The user-level install of the skill. This runs before the general skills rule so that only commands that write skills get the skill limits."
+    },
+    {
+      "id": "homunculus-dir",
+      "rule": "R6",
+      "pattern": "~/\\.claude/homunculus",
+      "replacement": "~/.local/share/ecc-homunculus",
+      "why": "The default data folder of the instinct CLI (_resolve_homunculus_dir). CLV2_HOMUNCULUS_DIR overrides it."
+    },
+    {
+      "id": "resume-legacy-usage",
+      "rule": "R5",
+      "commands": ["resume-session"],
+      "expect": 1,
+      "flags": "m",
+      "pattern": "^/resume-session ~/\\.claude/sessions/.*\\n",
+      "replacement": "",
+      "why": "The lookup of Claude Code's legacy session folder is removed."
+    },
+    {
+      "id": "resume-legacy-lookup",
+      "rule": "R5",
+      "commands": ["resume-session"],
+      "expect": 1,
+      "pattern": "search `~/\\.claude/session-data/` first, then the legacy\\s+`~/\\.claude/sessions/`, for files matching",
+      "replacement": "search `${KIRO_HOME:-$HOME/.kiro}/ecc/session-data/` for files matching",
+      "why": "The lookup of Claude Code's legacy session folder is removed."
+    },
+    {
+      "id": "resume-example-path",
+      "rule": "R5",
+      "commands": ["resume-session"],
+      "expect": 1,
+      "pattern": "/Users/you/\\.claude/session-data/",
+      "replacement": "/Users/you/.kiro/ecc/session-data/",
+      "why": "An example path in the output of the command."
+    },
+    {
+      "id": "session-filename-regex",
+      "rule": "R5",
+      "commands": ["save-session"],
+      "expect": 1,
+      "pattern": "that satisfies the rules enforced by `SESSION_FILENAME_REGEX` in `session-manager\\.js`:",
+      "replacement": "that satisfies these rules:",
+      "why": "session-manager.js is an ECC script that is not installed. The rules are listed right after the sentence."
+    },
+    {
+      "id": "session-data-dir",
+      "rule": "R5",
+      "pattern": "~/\\.claude/session-data",
+      "replacement": "${KIRO_HOME:-$HOME/.kiro}/ecc/session-data",
+      "why": "Saved sessions are plain files. Kiro's folder is ~/.kiro, and KIRO_HOME overrides it."
+    },
+    {
+      "id": "session-aliases-file",
+      "rule": "R5",
+      "pattern": "~/\\.claude/session-aliases\\.json",
+      "replacement": "${KIRO_HOME:-$HOME/.kiro}/ecc/session-aliases.json",
+      "why": "The aliases of saved sessions."
+    },
+    {
+      "id": "code-review-project-rules",
+      "rule": "R8",
+      "commands": ["code-review"],
+      "expect": 1,
+      "pattern": "Read `CLAUDE\\.md`, `\\.claude/docs/`, and any",
+      "replacement": "Read `AGENTS.md`, `.kiro/steering/`, and any",
+      "why": "Kiro reads project rules from AGENTS.md and steering."
+    },
+    {
+      "id": "claude-md",
+      "rule": "R8",
+      "pattern": "CLAUDE\\.md",
+      "replacement": "AGENTS.md",
+      "why": "Claude Code's instruction file. Kiro reads AGENTS.md."
+    },
+    {
+      "id": "memory-md",
+      "rule": "R8",
+      "pattern": "MEMORY\\.md",
+      "replacement": "AGENTS.md",
+      "why": "Claude Code's memory file. Kiro reads AGENTS.md."
+    },
+    {
+      "id": "gan-design-anthropic",
+      "rule": "R10",
+      "commands": ["gan-design"],
+      "expect": 1,
+      "pattern": "This is the same mode Anthropic used for their frontend design experiments",
+      "replacement": "This is the same mode the harness design paper used for its frontend design experiments (credited in /ecc-gan-build)",
+      "why": "The name of another vendor is not kept in an installed command. The paper is credited in gan-build, where the credit line is kept."
+    },
+    {
+      "id": "learn-eval-models",
+      "rule": "R10",
+      "commands": ["learn-eval"],
+      "expect": 1,
+      "pattern": " \\(Opus 4\\.6\\+, including the Claude 5 families\\)",
+      "replacement": "",
+      "why": "An installed command names no model."
+    },
+    {
+      "id": "checkpoint-verify",
+      "rule": "R2",
+      "commands": ["checkpoint"],
+      "expect": 1,
+      "pattern": "Run `/verify quick` to ensure",
+      "replacement": "Run the `verification-loop` skill (quick check) to ensure",
+      "why": "/verify is a Claude Code command. The verification-loop skill is installed."
+    },
+    {
+      "id": "plan-no-delegate",
+      "rule": "R9",
+      "commands": ["plan"],
+      "expect": 1,
+      "pattern": "Do not call the Task tool or any subagent by default\\.",
+      "replacement": "Do not delegate to a sub-agent by default.",
+      "why": "Kiro delegates to a sub-agent by name, not through a Task tool."
+    },
+    {
+      "id": "gan-delegate",
+      "rule": "R9",
+      "commands": ["gan-build"],
+      "expect": 3,
+      "pattern": "Launch (the )?(`?[a-z][a-z-]*`?) agent via Task tool",
+      "replacement": "Delegate to $1$2 sub-agent",
+      "append": "S2",
+      "why": "Kiro delegates to a sub-agent by name, not through a Task tool."
+    },
+    {
+      "id": "task-tool",
+      "rule": "R9",
+      "pattern": "\\bTask tool\\b",
+      "replacement": "sub-agent tool",
+      "append": "S2",
+      "why": "Kiro delegates to a sub-agent by name."
+    },
+    {
+      "id": "agent-tool",
+      "rule": "R9",
+      "pattern": "\\bAgent tool\\b",
+      "replacement": "sub-agent tool",
+      "append": "S2",
+      "why": "Kiro delegates to a sub-agent by name."
+    },
+    {
+      "id": "mcp-tool",
+      "rule": "R9",
+      "pattern": "mcp__([a-z0-9-]+)__",
+      "replacement": "@$1/",
+      "why": "Kiro writes an MCP tool as @server/tool."
+    },
+    {
+      "id": "project-slash",
+      "rule": "R2",
+      "pattern": "/project:gan-build",
+      "replacement": "/ecc-gan-build",
+      "why": "Claude Code's namespace for project commands."
+    },
+    {
+      "id": "ccg-plan",
+      "rule": "R2",
+      "pattern": "/ccg:plan",
+      "replacement": "/ecc-multi-plan",
+      "why": "The ccg-workflow name of the multi-plan command."
+    },
+    {
+      "id": "ccg-execute",
+      "rule": "R2",
+      "pattern": "/ccg:execute",
+      "replacement": "/ecc-multi-execute",
+      "why": "The ccg-workflow name of the multi-execute command."
+    },
+    {
+      "id": "security-scan-dir",
+      "rule": "R7",
+      "commands": ["security-scan"],
+      "expect": 1,
+      "pattern": "a `\\.claude/` path",
+      "replacement": "a `.kiro/` path",
+      "why": "The folder with the agent configuration of this project."
+    },
+    {
+      "id": "hookify-rules-dir",
+      "rule": "R7",
+      "pattern": "(?<![\\w/~.$}-])\\.claude/hookify\\.",
+      "replacement": ".kiro/ecc/hookify/",
+      "why": "Hookify rule files keep their format and move to .kiro/ecc/hookify/."
+    },
+    {
+      "id": "commands-dir",
+      "rule": "R7",
+      "pattern": "(?<![\\w/~.$}-])\\.claude/commands/",
+      "replacement": ".kiro/steering/",
+      "why": "Project commands are manual steering files in Kiro."
+    },
+    {
+      "id": "package-manager-file",
+      "rule": "R7",
+      "pattern": "(?<![\\w/~.$}-])\\.claude/package-manager\\.json",
+      "replacement": ".kiro/ecc/package-manager.json",
+      "why": "The package manager choice of a project."
+    },
+    {
+      "id": "project-artifacts",
+      "rule": "R7",
+      "pattern": "(?<![\\w/~.$}-])\\.claude/(plans?|prds|reviews|PRPs|campaigns|checkpoints\\.log|scripts)(?![\\w-])",
+      "replacement": ".kiro/ecc/$1",
+      "why": "Plans, PRDs, reviews, PRP files, campaigns and the checkpoint log go to .kiro/ecc/. The folder has no meaning for Kiro, and the .kiroignore block hides .claude/."
+    },
+    {
+      "id": "skills-home",
+      "rule": "R4",
+      "pattern": "~/\\.claude/skills",
+      "replacement": "~/.kiro/skills",
+      "append": "S3",
+      "why": "Kiro loads personal skills from ~/.kiro/skills. The command writes skills, so the Kiro limits for skills are added."
+    },
+    {
+      "id": "skills-project",
+      "rule": "R4",
+      "pattern": "(?<![\\w/~.$}-])\\.claude/skills",
+      "replacement": ".kiro/skills",
+      "append": "S3",
+      "why": "Kiro loads project skills from .kiro/skills. The command writes skills, so the Kiro limits for skills are added."
+    },
+    {
+      "id": "claude-code-name",
+      "rule": "R10",
+      "pattern": "Claude Code",
+      "replacement": "Kiro",
+      "why": "The name of the product that runs the command."
+    },
+    {
+      "id": "claude-name",
+      "rule": "R10",
+      "pattern": "\\bClaude\\b",
+      "replacement": "Kiro",
+      "why": "The name of the product that runs the command."
+    },
+    {
+      "id": "ecc-agent-prefix",
+      "rule": "R14",
+      "pattern": "(?<![\\w/])ecc:(?=[a-z])",
+      "replacement": "",
+      "why": "ECC names its agents ecc:planner because it is a Claude plugin. Kiro agents have plain names."
+    },
+    {
+      "id": "orch-load-skill",
+      "rule": "R9",
+      "commands": ["orch-add-feature", "orch-build-mvp", "orch-change-feature", "orch-fix-defect", "orch-refine-code"],
+      "expect": 1,
+      "pattern": "Invoke the `(orch-[a-z-]+)` skill with `\\$ARGUMENTS` as the (request|doc path)\\.",
+      "replacement": "Load the `$1` skill: read `.kiro/skills/$1/SKILL.md` and `.kiro/skills/orch-pipeline/SKILL.md`, then follow them with `$ARGUMENTS` as the $2. At each gate, stop and wait for the user's reply. Never approve a gate yourself.",
+      "append": "S2",
+      "why": "In Kiro the instruction to invoke a skill did nothing: headless runs never read the skill and improvised the pipeline. The command now names the files to read, and keeps the gates."
+    },
+    {
+      "id": "arguments-placeholder",
+      "rule": "R1",
+      "pattern": "\\$ARGUMENTS",
+      "replacement": "ARGS",
+      "why": "Steering files do no substitution. The header defines ARGS once."
+    },
+    {
+      "id": "command-names",
+      "rule": "R2",
+      "pattern": "(?<![\\w/.:~$}-])/({{commands}})(?![\\w/-])",
+      "replacement": "/ecc-$1",
+      "why": "ECC commands are installed as /ecc-<name>, so they do not clash with Kiro's own commands such as /plan and /checkpoint."
+    },
+    {
+      "id": "uninstalled-skills",
+      "rule": "R13",
+      "pattern": "`(?:skills/)?(?:{{uninstalledSkills}})(?:/SKILL\\.md|/)?`(?! \\(optional skill, not installed\\))",
+      "replacement": "$& (optional skill, not installed)",
+      "why": "A skill that ECC names but this install does not have is optional, and the text says so."
+    }
+  ]
+}

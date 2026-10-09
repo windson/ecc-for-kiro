@@ -1,0 +1,12 @@
+{
+  "schema": "ecc-kiro.profile-extras.v1",
+  "description": "Files of ECC v2.2.3 that the Kimi install did not have and that this tool installs anyway. Each one says why. Keep this list short.",
+  "entries": [
+    { "path": "skills/orch-add-feature/SKILL.md", "reason": "The /ecc-orch-add-feature command invokes this skill. Without it the command cannot work (command class C2)." },
+    { "path": "skills/orch-build-mvp/SKILL.md", "reason": "The /ecc-orch-build-mvp command invokes this skill. Without it the command cannot work (command class C2)." },
+    { "path": "skills/orch-change-feature/SKILL.md", "reason": "The /ecc-orch-change-feature command invokes this skill. Without it the command cannot work (command class C2)." },
+    { "path": "skills/orch-fix-defect/SKILL.md", "reason": "The /ecc-orch-fix-defect command invokes this skill. Without it the command cannot work (command class C2)." },
+    { "path": "skills/orch-pipeline/SKILL.md", "reason": "The five orch-* skills and their commands share this pipeline skill. Without it none of them can work (command class C2)." },
+    { "path": "skills/orch-refine-code/SKILL.md", "reason": "The /ecc-orch-refine-code command invokes this skill. Without it the command cannot work (command class C2)." }
+  ]
+}

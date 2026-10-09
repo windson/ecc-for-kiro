@@ -1,0 +1,100 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Weekly upstream watch: Mondays 06:00 UTC.
+    - cron: '0 6 * * 1'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: node ${{ matrix.node }} on ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        node: [18, 20, 22]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      # No dependencies: the project uses Node built-ins only. Do not run npm install.
+      - name: Run tests
+        run: node --test test/*.test.mjs
+
+  upstream-watch:
+    name: upstream ECC watch
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # Integrity of the pinned release: verify downloads exactly the profile files from
+      # github.com (via the skill's own git-based fetch) and checks every sha256, including
+      # ECC's LICENSE. This talks to github.com only; it never scrapes kiro.dev or AWS.
+      - name: verify --fetch (pinned release integrity)
+        run: node skills/ecc-kiro-setup/scripts/ecc-kiro.mjs verify --fetch
+
+      # Fail if ECC's current LICENSE no longer matches the sha256 we pinned. A changed
+      # license upstream is a blocker for publishing (see docs/license-review.md).
+      - name: ECC LICENSE sha256 unchanged
+        run: |
+          set -euo pipefail
+          PINNED="326146379f01bb137c0a5d3c54770c1aa31076705c8b88a7f6b26a460f6221b2"
+          for REF in v2.2.3 HEAD; do
+            git -c protocol.version=2 archive --remote=https://github.com/affaan-m/ECC.git "$REF" LICENSE 2>/dev/null | tar -xO > "LICENSE.$REF" || true
+          done
+          # git archive over https is not always allowed; fall back to a shallow fetch of the files.
+          if [ ! -s LICENSE.HEAD ]; then
+            rm -rf _ecc && git clone --depth 1 --filter=blob:none --no-checkout https://github.com/affaan-m/ECC.git _ecc
+            git -C _ecc checkout HEAD -- LICENSE
+            cp _ecc/LICENSE LICENSE.HEAD
+            git -C _ecc fetch --depth 1 origin tag v2.2.3 || true
+            git -C _ecc checkout v2.2.3 -- LICENSE 2>/dev/null && cp _ecc/LICENSE LICENSE.v2.2.3 || true
+          fi
+          node -e '
+            const { createHash } = require("node:crypto");
+            const { readFileSync, existsSync } = require("node:fs");
+            const pinned = process.argv[1];
+            const sha = (f) => createHash("sha256").update(readFileSync(f)).digest("hex");
+            let bad = false;
+            for (const ref of ["v2.2.3", "HEAD"]) {
+              const f = `LICENSE.${ref}`;
+              if (!existsSync(f)) { console.log(`skip ${ref}: not fetched`); continue; }
+              const got = sha(f);
+              const ok = got === pinned;
+              console.log(`${ref}: ${got} ${ok ? "OK" : "CHANGED"}`);
+              if (!ok) bad = true;
+            }
+            if (bad) { console.error("ECC LICENSE sha256 changed upstream — review before any version bump."); process.exit(1); }
+          ' "$PINNED"
+
+      # Report (do not fail) if ECC has a tag newer than the one we pin.
+      - name: Report newer ECC tags
+        run: |
+          set -euo pipefail
+          PINNED_TAG="v2.2.3"
+          git ls-remote --tags --refs https://github.com/affaan-m/ECC.git \
+            | awk '{print $2}' | sed 's#refs/tags/##' > _tags.txt
+          node -e '
+            const { readFileSync } = require("node:fs");
+            const pinned = process.argv[1];
+            const parse = (t) => { const m = /^v?(\d+)\.(\d+)\.(\d+)/.exec(t); return m ? [+m[1],+m[2],+m[3]] : null; };
+            const cmp = (a,b) => a[0]-b[0] || a[1]-b[1] || a[2]-b[2];
+            const base = parse(pinned);
+            const newer = readFileSync("_tags.txt","utf8").split("\n").map((s)=>s.trim()).filter(Boolean)
+              .map((t)=>[t,parse(t)]).filter(([,v])=>v && cmp(v,base)>0).map(([t])=>t);
+            if (newer.length) console.log("::warning::Newer ECC tags available: " + [...new Set(newer)].join(", "));
+            else console.log("No ECC tag newer than " + pinned);
+          ' "$PINNED_TAG"

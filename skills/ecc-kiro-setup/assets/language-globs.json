@@ -1,0 +1,9 @@
+{
+  "schema": "ecc-kiro.language-globs.v1",
+  "description": "File patterns for the language rule packs. A pack listed here uses these patterns. A pack that is not listed uses the union of the `paths:` lists of its own rule files. The three packs below are narrowed on purpose: their rules name `**/*.ts` or `**/*.tsx`, which would load 11 to 23 KB of unrelated rules for any TypeScript file. Delete an entry to use the patterns of the rules again.",
+  "packs": {
+    "arkts": ["**/*.ets", "**/module.json5", "**/oh-package.json5", "**/build-profile.json5", "**/ohosTest/**"],
+    "react-native": ["**/*.native.ts", "**/*.native.tsx", "**/*.ios.ts", "**/*.ios.tsx", "**/*.android.ts", "**/*.android.tsx", "**/metro.config.*", "**/eas.json"],
+    "vue": ["**/*.vue"]
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "description": "What the hooks part makes of the 13 hooks of ECC's Kiro adapter at v2.2.3: the 12 v1 hook files (trigger, matcher, action type), the hooks adapted by hand, the one left out, the script, and which hooks fire for which paths and tool names.",
+  "hooks": {
+    "ecc-auto-format": { "trigger": "PostFileSave", "matcher": "\\.(ts|tsx|js)$", "action": "agent" },
+    "ecc-code-review-on-write": { "trigger": "PostToolUse", "matcher": "write", "action": "agent" },
+    "ecc-console-log-check": { "trigger": "PostFileSave", "matcher": "\\.(js|ts|tsx)$", "action": "agent" },
+    "ecc-doc-file-warning": { "trigger": "PostFileCreate", "matcher": "\\.(md|mdx|rst)$|(^|/)(README|CHANGELOG)[^/]*$|(^|/)docs/", "action": "agent" },
+    "ecc-extract-patterns": { "trigger": "Stop", "matcher": null, "action": "agent" },
+    "ecc-git-push-review": { "trigger": "PreToolUse", "matcher": "shell", "action": "command" },
+    "ecc-python-lint-on-edit": { "trigger": "PostFileSave", "matcher": "\\.py$", "action": "agent" },
+    "ecc-rust-check-on-edit": { "trigger": "PostFileSave", "matcher": "\\.rs$", "action": "agent" },
+    "ecc-security-check-on-create": { "trigger": "PostFileCreate", "matcher": "(^|/)(auth|api|middleware)/", "action": "agent" },
+    "ecc-session-summary": { "trigger": "Stop", "matcher": null, "action": "agent" },
+    "ecc-tdd-reminder": { "trigger": "PostFileCreate", "matcher": "\\.(ts|tsx)$", "action": "agent" },
+    "ecc-typecheck-on-edit": { "trigger": "PostFileSave", "matcher": "\\.(ts|tsx)$", "action": "agent" }
+  },
+  "adapted": ["doc-file-warning", "extract-patterns", "git-push-review"],
+  "skipped": ["quality-gate"],
+  "scripts": [".kiro/ecc/scripts/git-push-guard.mjs"],
+  "byTrigger": { "PostFileCreate": 3, "PostFileSave": 5, "PostToolUse": 1, "PreToolUse": 1, "Stop": 2 },
+  "fires": {
+    "src/app.ts": { "PostFileSave": ["ecc-auto-format", "ecc-console-log-check", "ecc-typecheck-on-edit"], "PostFileCreate": ["ecc-tdd-reminder"] },
+    "src/App.tsx": { "PostFileSave": ["ecc-auto-format", "ecc-console-log-check", "ecc-typecheck-on-edit"], "PostFileCreate": ["ecc-tdd-reminder"] },
+    "src/util.js": { "PostFileSave": ["ecc-auto-format", "ecc-console-log-check"] },
+    "src/index.jsx": {},
+    "tools/run.py": { "PostFileSave": ["ecc-python-lint-on-edit"] },
+    "src/lib.rs": { "PostFileSave": ["ecc-rust-check-on-edit"] },
+    "src/auth/login.ts": { "PostFileSave": ["ecc-auto-format", "ecc-console-log-check", "ecc-typecheck-on-edit"], "PostFileCreate": ["ecc-security-check-on-create", "ecc-tdd-reminder"] },
+    "api/handler.py": { "PostFileSave": ["ecc-python-lint-on-edit"], "PostFileCreate": ["ecc-security-check-on-create"] },
+    "src/middleware/cors.js": { "PostFileSave": ["ecc-auto-format", "ecc-console-log-check"], "PostFileCreate": ["ecc-security-check-on-create"] },
+    "src/authors/list.ts": { "PostFileSave": ["ecc-auto-format", "ecc-console-log-check", "ecc-typecheck-on-edit"], "PostFileCreate": ["ecc-tdd-reminder"] },
+    "README.md": { "PostFileCreate": ["ecc-doc-file-warning"] },
+    "docs/guide.md": { "PostFileCreate": ["ecc-doc-file-warning"] },
+    "NOTES.md": { "PostFileCreate": ["ecc-doc-file-warning"] },
+    "package.json": {},
+    "requirements.txt": {},
+    "lib/main.go": {},
+    "/abs/project/src/api/v1/users.ts": { "PostFileSave": ["ecc-auto-format", "ecc-console-log-check", "ecc-typecheck-on-edit"], "PostFileCreate": ["ecc-security-check-on-create", "ecc-tdd-reminder"] }
+  },
+  "tools": {
+    "write": { "PostToolUse": ["ecc-code-review-on-write"] },
+    "shell": { "PreToolUse": ["ecc-git-push-review"] },
+    "read": {},
+    "web": {}
+  }
+}

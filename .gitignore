@@ -1,0 +1,25 @@
+# Dependencies (this project uses Node built-ins only; none should ever appear)
+node_modules/
+
+# npm pack output
+*.tgz
+
+# Scratch and temp
+/tmp/
+*.tmp
+_ecc/
+_tags.txt
+LICENSE.HEAD
+LICENSE.v2.2.3
+
+# ECC source cache (never commit; downloaded at install time)
+.cache/
+
+# Installer output and other harness folders (never belong in this repo)
+.kiro/ecc/
+.kimi-code/
+.claude/
+
+# OS and editor noise
+.DS_Store
+*.swp

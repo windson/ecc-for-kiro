@@ -1,0 +1,14 @@
+{
+  "schema": "ecc-kiro.command-snippets.v1",
+  "description": "Text that the installer adds to the commands, from part 1 of the command adaptation map. S1 is the header of every installed command. S2 (delegation) and S3 (skill limits) are added at the end of a command when a rewrite rule that names them (`append`) has changed it. `delegateCommand` is the sentence that replaces the `agent` and `subtask` settings of a command. Placeholders: {{slash}} is /ecc-<name>, {{ref}} is ecc-<name>, {{usage}} is the slash name followed by the argument hint, {{agent}} is the agent name, {{S2}} is snippet S2.",
+  "snippets": {
+    "S1": "Invoked as `{{slash}}`. ARGS is the text after `{{slash}}` in the user's latest message. If invoked with `#{{ref}}`, ARGS is the rest of that message. Empty ARGS follows the no-argument path. Usage: `{{usage}}`.",
+    "S2": "Delegate with the sub-agent tool by agent name. The sub-agent returns its result when done. If the agent is missing, do the work yourself and say so.",
+    "S3": "Skill folder name equals `name`, lowercase letters, digits and hyphens, at most 64 characters. Description at most 1024 characters.",
+    "delegateCommand": "This command runs in the `{{agent}}` sub-agent. {{S2}}"
+  },
+  "labels": {
+    "S2": "Delegation",
+    "S3": "Skill limits"
+  }
+}

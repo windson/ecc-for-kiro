@@ -1,0 +1,385 @@
+{
+  "schema": "ecc-kiro.command-classes.v1",
+  "description": "The class of every ECC v2.2.3 command, from part 2 of the command adaptation map. A: deterministic rewrites only, registered as /ecc-<name>. B: needs a Kiro-native rewrite, which an overlay in overlays/ delivers; a B command without a current overlay is pending, and every B command now has one. C: cannot work with the installed set; plan-canvas is the only one left, and it is left to the skill of the same name. `skill` names an installed skill that gives the same entry, so the command is not registered. `builtin` marks a command the engine builds itself. For B and C, `reason` says what in the ECC text is Claude-specific or missing and `missing` says what has to be supplied.",
+  "commands": {
+    "aside": {
+      "class": "A"
+    },
+    "auto-update": {
+      "class": "B",
+      "reason": "CLAUDE_PLUGIN_ROOT, node -e resolver, scripts/auto-update.js",
+      "missing": "a Kiro-native overlay on top of ecc-kiro.mjs doctor, plan --action update and update (the update action exists).",
+      "design": "B7"
+    },
+    "build-fix": {
+      "class": "A"
+    },
+    "checkpoint": {
+      "class": "A"
+    },
+    "code-review": {
+      "class": "A"
+    },
+    "cost-report": {
+      "class": "B",
+      "reason": "~/.claude/metrics/costs.jsonl, stop:cost-tracker, Claude Code",
+      "missing": "a Kiro-native overlay over usage-report.mjs, which the owned part installs to .kiro/ecc/scripts/ (cost and skills reports over Kiro's local session log).",
+      "design": "B5"
+    },
+    "cpp-build": {
+      "class": "A"
+    },
+    "cpp-review": {
+      "class": "A"
+    },
+    "cpp-test": {
+      "class": "A"
+    },
+    "ecc-guide": {
+      "class": "A",
+      "skill": "ecc-guide"
+    },
+    "epic-claim": {
+      "class": "B",
+      "reason": "runs node scripts/github-coordination.js <verb>, which is not in the profile",
+      "missing": "Delivered by the overlay (design C1): it drives gh issue directly and keeps one snapshot file per epic under .kiro/ecc/epics/. It needs gh and a signed-in session, nothing else.",
+      "design": "C1"
+    },
+    "epic-decompose": {
+      "class": "B",
+      "reason": "runs node scripts/github-coordination.js <verb>, which is not in the profile",
+      "missing": "Delivered by the overlay (design C1): it drives gh issue directly and keeps one snapshot file per epic under .kiro/ecc/epics/. It needs gh and a signed-in session, nothing else.",
+      "design": "C1"
+    },
+    "epic-publish": {
+      "class": "B",
+      "reason": "runs node scripts/github-coordination.js <verb>, which is not in the profile",
+      "missing": "Delivered by the overlay (design C1): it drives gh issue directly and keeps one snapshot file per epic under .kiro/ecc/epics/. It needs gh and a signed-in session, nothing else.",
+      "design": "C1"
+    },
+    "epic-review": {
+      "class": "B",
+      "reason": "runs node scripts/github-coordination.js <verb>, which is not in the profile",
+      "missing": "Delivered by the overlay (design C1): it drives gh issue directly and keeps one snapshot file per epic under .kiro/ecc/epics/. It needs gh and a signed-in session, nothing else.",
+      "design": "C1"
+    },
+    "epic-sync": {
+      "class": "B",
+      "reason": "runs node scripts/github-coordination.js <verb>, which is not in the profile",
+      "missing": "Delivered by the overlay (design C1): it drives gh issue directly and keeps one snapshot file per epic under .kiro/ecc/epics/. It needs gh and a signed-in session, nothing else.",
+      "design": "C1"
+    },
+    "epic-unblock": {
+      "class": "B",
+      "reason": "runs node scripts/github-coordination.js <verb>, which is not in the profile",
+      "missing": "Delivered by the overlay (design C1): it drives gh issue directly and keeps one snapshot file per epic under .kiro/ecc/epics/. It needs gh and a signed-in session, nothing else.",
+      "design": "C1"
+    },
+    "epic-validate": {
+      "class": "B",
+      "reason": "runs node scripts/github-coordination.js <verb>, which is not in the profile",
+      "missing": "Delivered by the overlay (design C1): it drives gh issue directly and keeps one snapshot file per epic under .kiro/ecc/epics/. It needs gh and a signed-in session, nothing else.",
+      "design": "C1"
+    },
+    "evolve": {
+      "class": "B",
+      "reason": "~/.claude/homunculus, CLAUDE_PLUGIN_ROOT, model: sonnet, Claude-format output",
+      "missing": "a Kiro-native overlay that offers Kiro-form installs of the skills, commands and agents the instinct CLI generates",
+      "design": "B9"
+    },
+    "fastapi-review": {
+      "class": "A"
+    },
+    "feature-dev": {
+      "class": "A"
+    },
+    "flutter-build": {
+      "class": "A"
+    },
+    "flutter-review": {
+      "class": "A"
+    },
+    "flutter-test": {
+      "class": "A"
+    },
+    "gan-build": {
+      "class": "A"
+    },
+    "gan-design": {
+      "class": "A"
+    },
+    "go-build": {
+      "class": "A"
+    },
+    "go-review": {
+      "class": "A"
+    },
+    "go-test": {
+      "class": "A"
+    },
+    "gradle-build": {
+      "class": "A"
+    },
+    "harness-audit": {
+      "class": "B",
+      "reason": "ARGS, node scripts/harness-audit.js, Claude-layout checks",
+      "missing": "a Kiro-native overlay over the audit subcommand of ecc-kiro.mjs, which scores a Kiro project with a fixed rubric instead of ECC's Claude-layout checks.",
+      "design": "B6"
+    },
+    "hookify": {
+      "class": "B",
+      "reason": ".claude/hookify.*.local.md, Claude Code hooks",
+      "missing": "a Kiro-native overlay that keeps the rules in .kiro/ecc/hookify/. The script hookify-guard.mjs and the switched-off hook file ecc-hookify.json are installed by the owned part.",
+      "design": "B1"
+    },
+    "hookify-configure": {
+      "class": "B",
+      "reason": ".claude/hookify.*.local.md",
+      "missing": "a Kiro-native overlay that keeps the rules in .kiro/ecc/hookify/. The script hookify-guard.mjs and the switched-off hook file ecc-hookify.json are installed by the owned part.",
+      "design": "B1"
+    },
+    "hookify-help": {
+      "class": "B",
+      "reason": "Claude Code hook system",
+      "missing": "a Kiro-native overlay that keeps the rules in .kiro/ecc/hookify/. The script hookify-guard.mjs and the switched-off hook file ecc-hookify.json are installed by the owned part.",
+      "design": "B1"
+    },
+    "hookify-list": {
+      "class": "B",
+      "reason": ".claude/hookify.*.local.md",
+      "missing": "a Kiro-native overlay that keeps the rules in .kiro/ecc/hookify/. The script hookify-guard.mjs and the switched-off hook file ecc-hookify.json are installed by the owned part.",
+      "design": "B1"
+    },
+    "instinct-export": {
+      "class": "A"
+    },
+    "instinct-import": {
+      "class": "A"
+    },
+    "instinct-status": {
+      "class": "A"
+    },
+    "jira": {
+      "class": "A"
+    },
+    "kotlin-build": {
+      "class": "A"
+    },
+    "kotlin-review": {
+      "class": "A"
+    },
+    "kotlin-test": {
+      "class": "A"
+    },
+    "learn": {
+      "class": "A"
+    },
+    "learn-eval": {
+      "class": "A"
+    },
+    "loop-start": {
+      "class": "B",
+      "reason": "ARGS, .claude/plans, ECC_HOOK_PROFILE, dangling continuous-agent-loop",
+      "missing": "a Kiro-native overlay built on /goal and workflow recipes, both opt-in features that are off by default. The script feature-check.mjs (installed by the owned part) fails closed with the enable steps.",
+      "design": "B3"
+    },
+    "loop-status": {
+      "class": "B",
+      "reason": "ARGS, ~/.claude/projects, ScheduleWakeup, npx ecc loop-status, ~/.claude/loops",
+      "missing": "a Kiro-native overlay built on /goal and workflow recipes, both opt-in features that are off by default. The script feature-check.mjs (installed by the owned part) fails closed with the enable steps.",
+      "design": "B3"
+    },
+    "marketing-campaign": {
+      "class": "A"
+    },
+    "model-route": {
+      "class": "B",
+      "reason": "ARGS, opus/sonnet/haiku",
+      "missing": "a Kiro-native overlay that reads the live model list instead of naming opus, sonnet and haiku",
+      "design": "B11"
+    },
+    "multi-backend": {
+      "class": "B",
+      "reason": "ARGS, codeagent-wrapper, .ccg/ roles, AskUserQuestion, mcp__ace-tool__*, .claude/plan/",
+      "missing": "a Kiro-native overlay that delegates to the three read-only panel agents (ecc-panel-backend, ecc-panel-frontend, ecc-panel-reviewer), which the owned part installs with a model: from the local model list where one is known. Whether a sub-agent applies its model: is not proven.",
+      "design": "B2"
+    },
+    "multi-execute": {
+      "class": "B",
+      "reason": "same, plus Task(Explore), SESSION_ID resume",
+      "missing": "a Kiro-native overlay that delegates to the three read-only panel agents (ecc-panel-backend, ecc-panel-frontend, ecc-panel-reviewer), which the owned part installs with a model: from the local model list where one is known. Whether a sub-agent applies its model: is not proven.",
+      "design": "B2"
+    },
+    "multi-frontend": {
+      "class": "B",
+      "reason": "same as multi-backend",
+      "missing": "a Kiro-native overlay that delegates to the three read-only panel agents (ecc-panel-backend, ecc-panel-frontend, ecc-panel-reviewer), which the owned part installs with a model: from the local model list where one is known. Whether a sub-agent applies its model: is not proven.",
+      "design": "B2"
+    },
+    "multi-plan": {
+      "class": "B",
+      "reason": "same, plus Task(Explore)",
+      "missing": "a Kiro-native overlay that delegates to the three read-only panel agents (ecc-panel-backend, ecc-panel-frontend, ecc-panel-reviewer), which the owned part installs with a model: from the local model list where one is known. Whether a sub-agent applies its model: is not proven.",
+      "design": "B2"
+    },
+    "multi-workflow": {
+      "class": "B",
+      "reason": "same, plus bare /workflow",
+      "missing": "a Kiro-native overlay that delegates to the three read-only panel agents (ecc-panel-backend, ecc-panel-frontend, ecc-panel-reviewer), which the owned part installs with a model: from the local model list where one is known. Whether a sub-agent applies its model: is not proven.",
+      "design": "B2"
+    },
+    "orch-add-feature": {
+      "class": "A"
+    },
+    "orch-build-mvp": {
+      "class": "A"
+    },
+    "orch-change-feature": {
+      "class": "A"
+    },
+    "orch-fix-defect": {
+      "class": "A"
+    },
+    "orch-refine-code": {
+      "class": "A"
+    },
+    "orch-review": {
+      "class": "B",
+      "reason": "ARGS, Workflow() tool, workflows/orch-review.workflow.js",
+      "missing": "a Kiro-native overlay that starts the recipe .kiro/workflows/ecc-orch-review.workflow.json (installed by the owned part). Needs Workflows enabled; feature-check.mjs fails closed with the enable steps.",
+      "design": "B12"
+    },
+    "plan": {
+      "class": "A"
+    },
+    "plan-canvas": {
+      "class": "C",
+      "reason": "needs the ecc-plan-canvas CLI (about 2,800 lines across nine files), a long-running await process and a Claude Stop hook",
+      "missing": "C3: nine ECC files or the npm package ecc-universal, plus a Kiro Stop hook. Recommended alternative: Kiro plan mode or /ecc-plan, whose confirmation gate exists.",
+      "design": "C3",
+      "skill": "plan-canvas"
+    },
+    "plan-prd": {
+      "class": "A"
+    },
+    "pm2": {
+      "class": "B",
+      "reason": "ARGS, .claude/commands, .claude/scripts, CLAUDE.md",
+      "missing": "a Kiro-native overlay that generates manual steering files instead of .claude/commands files",
+      "design": "B8"
+    },
+    "pr": {
+      "class": "A"
+    },
+    "project-init": {
+      "class": "B",
+      "reason": "install-plan.js, install-apply.js, --target claude, CLAUDE.md",
+      "missing": "a Kiro-native overlay on top of ecc-kiro.mjs doctor, plan and install",
+      "design": "B7"
+    },
+    "projects": {
+      "class": "A"
+    },
+    "promote": {
+      "class": "A"
+    },
+    "prp-commit": {
+      "class": "A"
+    },
+    "prp-implement": {
+      "class": "A"
+    },
+    "prp-plan": {
+      "class": "A"
+    },
+    "prp-pr": {
+      "class": "A"
+    },
+    "prp-prd": {
+      "class": "A"
+    },
+    "prune": {
+      "class": "A"
+    },
+    "python-review": {
+      "class": "A"
+    },
+    "quality-gate": {
+      "class": "B",
+      "design": "B10",
+      "builtin": "quality-gate"
+    },
+    "react-build": {
+      "class": "A"
+    },
+    "react-review": {
+      "class": "A"
+    },
+    "react-test": {
+      "class": "A"
+    },
+    "refactor-clean": {
+      "class": "A"
+    },
+    "resume-session": {
+      "class": "A"
+    },
+    "review-pr": {
+      "class": "A"
+    },
+    "rust-build": {
+      "class": "A"
+    },
+    "rust-review": {
+      "class": "A"
+    },
+    "rust-test": {
+      "class": "A"
+    },
+    "santa-loop": {
+      "class": "B",
+      "reason": "Agent tool with subagent_type and model: opus, codeagent-wrapper, external CLIs",
+      "missing": "a Kiro-native overlay that delegates to the three read-only panel agents (ecc-panel-backend, ecc-panel-frontend, ecc-panel-reviewer), which the owned part installs with a model: from the local model list where one is known. Whether a sub-agent applies its model: is not proven.",
+      "design": "B2"
+    },
+    "save-session": {
+      "class": "A"
+    },
+    "security-scan": {
+      "class": "A"
+    },
+    "sessions": {
+      "class": "B",
+      "reason": "session-manager, session-aliases via node -e, CLAUDE_PLUGIN_ROOT",
+      "missing": "a Kiro-native overlay that lists, loads and aliases session files with shell and read tools",
+      "design": "B4"
+    },
+    "setup-pm": {
+      "class": "B",
+      "reason": "scripts/setup-package-manager.js, CLAUDE_PACKAGE_MANAGER, .claude/package-manager.json",
+      "missing": "a Kiro-native overlay on top of ecc-kiro.mjs doctor, plan and install",
+      "design": "B7"
+    },
+    "skill-create": {
+      "class": "A"
+    },
+    "skill-health": {
+      "class": "B",
+      "reason": "scripts/skills-health.js, lib/skill-evolution, ~/.claude/state/skill-runs.jsonl",
+      "missing": "a Kiro-native overlay over usage-report.mjs, which the owned part installs to .kiro/ecc/scripts/ (cost and skills reports over Kiro's local session log).",
+      "design": "B5"
+    },
+    "test-coverage": {
+      "class": "A"
+    },
+    "update-codemaps": {
+      "class": "A"
+    },
+    "update-docs": {
+      "class": "A"
+    },
+    "vue-review": {
+      "class": "A"
+    }
+  }
+}
